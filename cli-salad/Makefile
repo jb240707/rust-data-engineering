@@ -8,6 +8,6 @@ test:
 	cargo test --quiet
 
 run:
-	cargo run 
+	cargo run -- --number 3 --fruits apple --fruits cherry --fruits orange --fruits pear --fruits peach
 
 all: format lint test run

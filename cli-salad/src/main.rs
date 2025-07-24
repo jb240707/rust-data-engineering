@@ -1,5 +1,5 @@
 use clap::Parser;
-use cli_salad::create_fruit_salad;
+use cli_salad::create_fruit_salad_with_fruits;
 
 #[derive(Parser)]
 #[clap(
@@ -8,23 +8,29 @@ use cli_salad::create_fruit_salad;
     about = "Number of fruits to include in the salad"
 )]
 struct Opts {
+    /// Number of fruits to include in the salad
     #[clap(short, long)]
     number: usize,
+
+    /// List of fruits to include in the salad
+    #[clap(short, long, value_parser, required = true)]
+    fruits: Vec<String>,
 }
 
 fn main() {
-    let opts: Opts = Opts::parse();
+    let opts = Opts::parse();
 
-    // Get the number of fruits the user requested
-    let num_fruits = opts.number;
-
-    // Create the fruit salad
-    create_fruit_salad(num_fruits);
-
-    // Print the fruit salad in human readable format with a count of fruits used
-    println!(
-        "Created Fruit salad with {} fruits: {:?}",
-        num_fruits,
-        create_fruit_salad(num_fruits)
-    );
+    match create_fruit_salad_with_fruits(opts.number, &opts.fruits) {
+        Ok(mut salad) => {
+            salad.sort();
+            println!(
+                "Created Fruit salad with {} fruits (alphabetical order): {:?}",
+                opts.number, salad
+            );
+        }
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            std::process::exit(1);
+        }
+    }
 }

@@ -21,3 +21,20 @@ pub fn create_fruit_salad(num_fruits: usize) -> Vec<String> {
 
     fruits.into_iter().take(num_fruits).collect()
 }
+
+/// Create a fruit salad by repeating the provided fruits up to `num` items.
+pub fn create_fruit_salad_with_fruits(
+    num: usize,
+    fruits: &[String],
+) -> Result<Vec<String>, String> {
+    if num > fruits.len() {
+        return Err(format!(
+            "Requested {} fruits, but only {} unique fruits provided.",
+            num,
+            fruits.len()
+        ));
+    }
+    let mut salad = fruits.to_vec();
+    salad.truncate(num);
+    Ok(salad)
+}
